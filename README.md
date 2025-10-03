@@ -1,47 +1,107 @@
-# 🧠 MindCare AI
+# 🧠 MindCare PAK – Mental Health Support Platform
 
-**MindCare AI** is a unified prototype for therapist discovery + multi‑AI therapist chat with a wellness coach.
+A full-stack AI-powered platform for **therapist discovery** and **safe, supportive AI conversations** with simulated therapist personas.  
+Built to **empower mental health accessibility in Pakistan 🇵🇰**.
 
-## Modules
-- **Therapist Finder** (search, filters, detail view)
-- **Multi‑AI Chat** (3 therapist personas + user)
-- **Wellness Coach** (breathing/stress‑relief cards)
-- **Favorites** (bookmark therapists)
-- **Crisis Detector** (safety keywords → helplines)
+---
 
-## Stack
-- Frontend: React + Vite + TailwindCSS + Framer Motion (Vercel-ready)
-- Backend: FastAPI (Python) + Supabase client (Railway/Fly.io)
-- DB: Supabase Postgres (therapists, users, chat logs)
-- AI: OpenAI GPT (or OSS models) for persona responses
+## ✨ What Our Prototype Can Do
 
-## Quickstart
+### 👩‍⚕️ Therapist Finder
+- Search and filter therapists by:
+  - City
+  - Gender
+  - Experience range
+  - Consultation mode (online / in-person)
+  - Fee range
+- Sort by relevance, fee, or experience.
+- View detailed therapist profiles with education, expertise, contact info.
+- Save favorites ❤️ for quick access later.
+- Voice input 🎙️ for search (English + Urdu).
 
-### Backend
+### 💬 AI Roundtable Chat
+- Join an **interactive digital therapy roundtable**:
+  - **Dr. Sarah Chen (CBT)** → Evidence-based, structured, practical.
+  - **Dr. James Williams (Holistic)** → Mind-body-spirit, breath, mindfulness.
+  - **Dr. Maria Rodriguez (Analytical)** → Root causes, childhood patterns, insight.
+- Supports **realistic therapist debate topics**:
+  - Best Approaches for Treating Anxiety
+  - Digital Therapy vs Traditional Sessions
+  - Work-Life Balance in Modern Times
+  - Depression Treatment Approaches
+  - The Role of Medication in Mental Health
+- Features:
+  - Typing indicators + delays for realism.
+  - User joins as the **4th participant**.
+  - Export conversations as **.txt** or **.json**.
+  - Playback speed control (1x, 1.5x, 2x).
+  - Pause/resume ongoing debate.
+
+### 🛡️ Safety Features
+- **Crisis Detection Agent**:
+  - Flags words like “suicide”, “self-harm”, etc.
+  - Immediately inserts a **supportive helpline message** (e.g., Umang 1093 in Pakistan).
+  - Provides extra cards with emergency resources.
+- **Wellness Agent**:
+  - Detects stress/anxiety terms.
+  - Provides guided **breathing exercises** with visuals and steps.
+
+
+
+
+
+## 🧩 Agents Flow & Orchestration
+
+MindCare AI uses a **multi-agent orchestration pipeline**:
+
+1. **Frontend (React + Vite)**  
+   - Sends user input and chat history to backend (`/chat/respond`).  
+   - Displays responses with persona avatars, colors, timestamps.  
+
+2. **Backend (FastAPI + Agents)**  
+   - **Chat Agent (`chat_agent.py`)**  
+     - Orchestrates conversation flow.  
+     - Decides which persona should respond (CBT, Holistic, Analytical).  
+     - Formats messages with timestamps + typing delays.  
+   - **Crisis Detector (`crisis_detector.py`)**  
+     - If crisis keywords found → inserts emergency message + helpline card.  
+   - **Wellness Agent (`wellness_agent.py`)**  
+     - If stress/anxiety detected → adds breathing card with visual guidance.  
+
+3. **OpenAI Integration**  
+   - Each persona has a **system prompt** guiding its philosophy.  
+   - Messages include context + user’s history.  
+   - AI generates responses in **persona-specific style**.  
+
+4. **Orchestration Loop**  
+   - User sends message →  
+   - Crisis/Wellness checks →  
+   - Selected AI persona replies →  
+   - Frontend enqueues response with delay →  
+   - UI displays conversation as if it were real-time.  
+
+---
+
+## 🚀 Live Demo
+🔗 [MindCare AI (Vercel Deploy)](https://your-vercel-url.vercel.app)  
+*(replace with actual Vercel deployment link once live)*  
+
+Demo user: `demo-user`
+
+---
+
+## 📦 Technology Stack
+- **Frontend**: React (Vite), TailwindCSS, Framer Motion.
+- **Backend**: FastAPI, Python.
+- **Database**: Supabase (Postgres).
+- **AI**: OpenAI GPT (multi-persona orchestration).
+
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone Repo
 ```bash
-cd backend
-python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cp ../.env.example ../.env   # then fill in keys
-uvicorn app.main:app --reload
-# visit http://127.0.0.1:8000/docs
-```
-
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-# visit http://127.0.0.1:5173
-```
-
-## Environment
-Create `.env` at repo root:
-```
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-OPENAI_API_KEY=
-```
-
-## Docs
-See `docs/architecture.puml` for the full system diagram.
+git clone https://github.com/alishan4/MINDCARE_PAK.git
+cd MINDCARE_PAK
