@@ -82,9 +82,7 @@ MindCare AI uses a **multi-agent orchestration pipeline**:
 
 ---
 
-## 🚀 Live Demo
-🔗 [MindCare AI (Vercel Deploy)](https://your-vercel-url.vercel.app)  
-*(replace with actual Vercel deployment link once live)*  
+
 
 Demo user: `demo-user`
 
