@@ -1,0 +1,1 @@
+Design notes: separation of concerns, user-centered UX, safety-first, scalable infra.

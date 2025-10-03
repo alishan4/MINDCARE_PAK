@@ -1,0 +1,75 @@
+@startuml MindCareAI_Architecture
+title MindCare AI — Final Prototype Architecture (Finder + Multi-AI Chat + Wellness)
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor<<Agent>> #DDEEFF
+  BackgroundColor<<Service>> #FFE5E5
+  BackgroundColor<<Store>> #E8F7E8
+  BackgroundColor<<Infra>> #FFF3CD
+}
+skinparam noteBackgroundColor #FFFFEE
+skinparam noteBorderColor #999999
+
+actor "User\n(Web UI: React + Tailwind + Framer Motion)" as User
+
+rectangle "FastAPI Orchestrator\n(REST API + Agent runner)" <<Service>> as Orchestrator
+
+package "Agents" {
+  rectangle "Profile Agent\n(parse + normalize CSV → DB)" <<Agent>> as ProfileAgent
+  rectangle "Finder Agent\n(filter/search + SQL query)" <<Agent>> as FinderAgent
+  rectangle "Chat Orchestrator Agent\n(manages AI flow)" <<Agent>> as ChatAgent
+  rectangle "Persona Agent: CBT Expert\n(Evidence-based)" <<Agent>> as CBT
+  rectangle "Persona Agent: Holistic Healer\n(Mind-body)" <<Agent>> as Holistic
+  rectangle "Persona Agent: Analytical Psychologist\n(Depth psychology)" <<Agent>> as Analytical
+  rectangle "Crisis Detector Agent\n(safety keywords → helpline)" <<Agent>> as Crisis
+  rectangle "Recommendation Agent\n(chat → therapist suggestions)" <<Agent>> as Recommender
+  rectangle "Favorites Agent\n(save/bookmark therapists)" <<Agent>> as Favorites
+  rectangle "Wellness Coach Agent\n(stress relief cards: breathing, stretches)" <<Agent>> as Wellness
+}
+
+package "Data & Models" {
+  rectangle "Therapists Table (79+)\nSupabase Postgres" <<Store>> as Supabase
+  rectangle "User Profiles + Favorites\nSupabase" <<Store>> as UserDB
+  rectangle "Chat Logs + Exports\nSupabase JSON" <<Store>> as ChatLogs
+  rectangle "Embeddings: all-MiniLM\n(optional search)" <<Infra>> as Embeddings
+  rectangle "LLMs: GPT-4 / LLaMA3\n(persona responses)" <<Infra>> as LLMs
+}
+
+' ==== FLOWS ====
+User --> Orchestrator : HTTP (React fetch)\nGET /therapists\nPOST /chat/respond\nPOST /favorites
+Orchestrator --> ProfileAgent : load & normalize CSV → DB
+Orchestrator --> FinderAgent : search/filter (SQL)
+FinderAgent --> Supabase : SELECT * FROM therapists
+
+Orchestrator --> ChatAgent : orchestrate AI debate
+ChatAgent --> CBT : respond()
+ChatAgent --> Holistic : respond()
+ChatAgent --> Analytical : respond()
+ChatAgent --> LLMs : generate persona text
+ChatAgent --> Crisis : check for unsafe/stress keywords
+Crisis --> Wellness : trigger calming exercise card
+ChatAgent --> Recommender : suggest therapists (based on chat topic)
+
+Orchestrator --> Favorites : save/list bookmarks
+Orchestrator --> UserDB : persist favorites
+Orchestrator --> ChatLogs : store transcript (for export)
+
+note right of Orchestrator
+ENV:
+  MODE = demo | live
+  DB = Supabase
+  AI_PROVIDER = OpenAI | Local LLM
+  FEATURES = Finder + Chat + Crisis + Wellness + Favorites
+end note
+
+legend right
+|= Stereotype |= Meaning |
+|<<Service>>| API / entrypoint |
+|<<Agent>>| Single-responsibility logic unit |
+|<<Store>>| Data persistence |
+|<<Infra>>| Model / infra |
+endlegend
+
+@enduml
