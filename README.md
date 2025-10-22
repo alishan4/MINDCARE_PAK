@@ -5,8 +5,6 @@ Built to **empower mental health accessibility in Pakistan 🇵🇰**.
 
 ---
 
-## ✨ What Our Prototype Can Do
-
 ### 👩‍⚕️ Therapist Finder
 - Search and filter therapists by:
   - City
